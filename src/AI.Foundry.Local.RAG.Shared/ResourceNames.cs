@@ -2,5 +2,5 @@
 
 public static class ResourceNames
 {
-    public const string SampleApi = "sample";
+    public const string Frontend = "ai-foundry-local-rag-web";
 }

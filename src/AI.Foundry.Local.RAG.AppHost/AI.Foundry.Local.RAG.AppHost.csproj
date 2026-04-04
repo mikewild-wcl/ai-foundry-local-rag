@@ -6,12 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!--
-      Tip: Use AspireProjectMetadataTypeName with new projects and use the short name in AppHost.cs:
-        builder.AddProject<SampleApi>(ResourceNames.SampleApi)
-    -->
-    <!--<ProjectReference Include="..\AI.Foundry.Local.RAG.SampleApi\AI.Foundry.Local.RAG.SampleApi.csproj" AspireProjectMetadataTypeName="SampleApi" />-->
-    <ProjectReference Include="..\..\AI.Foundry.Local.RAG.Web\AI.Foundry.Local.RAG.Web.csproj" />
+    <ProjectReference Include="..\AI.Foundry.Local.RAG.Frontend\AI.Foundry.Local.RAG.Frontend\AI.Foundry.Local.RAG.Frontend.csproj" AspireProjectMetadataTypeName="Frontend" />
     <ProjectReference Include="..\AI.Foundry.Local.RAG.Shared\AI.Foundry.Local.RAG.Shared.csproj" IsAspireProjectResource="false" />
   </ItemGroup>
 
