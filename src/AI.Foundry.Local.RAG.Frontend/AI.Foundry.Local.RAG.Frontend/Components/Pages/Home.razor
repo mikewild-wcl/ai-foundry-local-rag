@@ -1,7 +1,127 @@
-﻿@page "/"
+@page "/"
+@rendermode InteractiveServer
+@using AI.Foundry.Local.RAG.Frontend.Models
+@using AI.Foundry.Local.RAG.Frontend.Services
+@using AI.Foundry.Local.RAG.Frontend.State
+@inject IChatService ChatService
+@inject ChatState ChatState
+@inject IJSRuntime JS
 
-<PageTitle>Home</PageTitle>
+<PageTitle>AI Chat</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="chat-container">
+    <header class="chat-header">
+        <span class="chat-logo">&#x2728;</span>
+        <h1>AI Assistant</h1>
+    </header>
 
-Welcome to your new app.
+    <div class="chat-history" @ref="_historyRef">
+        @if (ChatState.Messages.Count == 0)
+        {
+            <div class="chat-empty">
+                <span class="empty-icon">&#x1F4AC;</span>
+                <p>How can I help you today?</p>
+            </div>
+        }
+        @foreach (var message in ChatState.Messages)
+        {
+            <div class="message-row @(message.Role == "user" ? "user-row" : "assistant-row")">
+                @if (message.Role == "assistant")
+                {
+                    <div class="avatar assistant-avatar">&#x2728;</div>
+                }
+                <div class="message-bubble @(message.Role == "user" ? "user-bubble" : "assistant-bubble")">
+                    <p>@message.Content</p>
+                    <span class="message-time">@message.Timestamp.ToString("HH:mm")</span>
+                </div>
+                @if (message.Role == "user")
+                {
+                    <div class="avatar user-avatar">You</div>
+                }
+            </div>
+        }
+        @if (_isLoading)
+        {
+            <div class="message-row assistant-row">
+                <div class="avatar assistant-avatar">&#x2728;</div>
+                <div class="message-bubble assistant-bubble typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="chat-input-area">
+        <div class="input-wrapper">
+            <textarea
+                @bind="_inputMessage"
+                @bind:event="oninput"
+                @onkeydown="HandleKeyDownAsync"
+                placeholder="Message AI Assistant…"
+                rows="1"
+                disabled="@_isLoading"
+                class="chat-textarea"
+                aria-label="Message input"></textarea>
+            <button
+                @onclick="SendMessageAsync"
+                disabled="@(string.IsNullOrWhiteSpace(_inputMessage) || _isLoading)"
+                class="send-btn"
+                title="Send message"
+                aria-label="Send">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+            </button>
+        </div>
+        <p class="input-hint">Press Enter to send &middot; Shift+Enter for new line</p>
+    </div>
+</div>
+
+@code {
+    private string _inputMessage = string.Empty;
+    private bool _isLoading;
+    private ElementReference _historyRef;
+
+    private async Task SendMessageAsync()
+    {
+        var text = _inputMessage.Trim();
+        if (string.IsNullOrEmpty(text) || _isLoading)
+            return;
+
+        _inputMessage = string.Empty;
+        _isLoading = true;
+
+        ChatState.AddMessage(new ChatMessage("user", text, DateTimeOffset.Now));
+        await ScrollToBottomAsync();
+
+        try
+        {
+            var response = await ChatService.SendMessageAsync(text);
+            ChatState.AddMessage(new ChatMessage("assistant", response, DateTimeOffset.Now));
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+
+        await ScrollToBottomAsync();
+    }
+
+    private async Task HandleKeyDownAsync(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !e.ShiftKey)
+            await SendMessageAsync();
+    }
+
+    private async Task ScrollToBottomAsync()
+    {
+        await InvokeAsync(StateHasChanged);
+        await JS.InvokeVoidAsync("scrollToBottom", _historyRef);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && ChatState.Messages.Count > 0)
+            await JS.InvokeVoidAsync("scrollToBottom", _historyRef);
+    }
+}

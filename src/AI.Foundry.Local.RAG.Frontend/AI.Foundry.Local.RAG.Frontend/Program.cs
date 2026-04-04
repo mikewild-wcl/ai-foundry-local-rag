@@ -1,8 +1,13 @@
 using AI.Foundry.Local.RAG.Frontend.Components;
+using AI.Foundry.Local.RAG.Frontend.Services;
+using AI.Foundry.Local.RAG.Frontend.State;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+
+builder.Services.AddScoped<IChatService, DummyChatService>();
+builder.Services.AddScoped<ChatState>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
