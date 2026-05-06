@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\AI.Foundry.Local.RAG.AI.Abstractions\AI.Foundry.Local.RAG.AI.Abstractions.csproj" />
     <ProjectReference Include="..\..\AI.Foundry.Local.RAG.ServiceDefaults\AI.Foundry.Local.RAG.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\AI.Foundry.Local.RAG.Frontend.Client\AI.Foundry.Local.RAG.Frontend.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
   </ItemGroup>
 

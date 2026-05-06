@@ -16,6 +16,11 @@ Aspire has been initialised using
 aspire init
 ```
 
+## Foundry Local models
+
+[Foundry Local Models - Browse AI Models](https://www.foundrylocal.ai/models)
+
+
 ## Hugging Face setup
 
 The embedding model needs to be downloaded from Hugging Face using the [CLI](https://huggingface.co/docs/huggingface_hub/en/guides/cli). Install it by running

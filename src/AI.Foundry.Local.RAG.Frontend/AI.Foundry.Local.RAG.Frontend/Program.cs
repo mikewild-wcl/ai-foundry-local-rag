@@ -1,4 +1,5 @@
 using AI.Foundry.Local.RAG.Frontend.Components;
+using AI.Foundry.Local.RAG.Frontend.Extensions;
 using AI.Foundry.Local.RAG.Frontend.Services;
 using AI.Foundry.Local.RAG.Frontend.State;
 
@@ -6,13 +7,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
+builder.ConfigureOptions();
+if (builder.Environment.IsDevelopment())
+{
+    builder.DumpConfiguration();
+}
+
+builder.AddAIServices();
+
 builder.Services.AddScoped<IChatService, DummyChatService>();
 builder.Services.AddScoped<ChatState>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents()
-    .AddInteractiveWebAssemblyComponents();
+    .AddInteractiveServerComponents();
 
 var app = builder.Build();
 
@@ -21,7 +29,6 @@ app.MapDefaultEndpoints();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseWebAssemblyDebugging();
 }
 else
 {
@@ -36,8 +43,6 @@ app.UseAntiforgery();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
-    .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(AI.Foundry.Local.RAG.Frontend.Client._Imports).Assembly);
+    .AddInteractiveServerRenderMode();
 
 await app.RunAsync();

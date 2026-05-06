@@ -1,10 +1,8 @@
 @page "/"
 @rendermode InteractiveServer
-@using AI.Foundry.Local.RAG.Frontend.Models
-@using AI.Foundry.Local.RAG.Frontend.Services
-@using AI.Foundry.Local.RAG.Frontend.State
-@inject IChatService ChatService
-@inject ChatState ChatState
+@using global::AI.Foundry.Local.RAG.Frontend.Models
+@inject global::AI.Foundry.Local.RAG.Frontend.Services.IChatService ChatService
+@inject global::AI.Foundry.Local.RAG.Frontend.State.ChatState ChatState
 @inject IJSRuntime JS
 
 <PageTitle>AI Chat</PageTitle>

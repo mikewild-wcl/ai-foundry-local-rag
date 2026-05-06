@@ -1,4 +1,4 @@
-﻿<Project Sdk="Aspire.AppHost.Sdk/13.2.1">
+<Project Sdk="Aspire.AppHost.Sdk/13.2.2">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Azure.AIFoundry" />
+    <!--<PackageReference Include="Aspire.Hosting.Foundry" />-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AI.Foundry.Local.RAG.AI.Abstractions\AI.Foundry.Local.RAG.AI.Abstractions.csproj" IsAspireProjectResource="false" />
     <ProjectReference Include="..\AI.Foundry.Local.RAG.Frontend\AI.Foundry.Local.RAG.Frontend\AI.Foundry.Local.RAG.Frontend.csproj" AspireProjectMetadataTypeName="Frontend" />
     <ProjectReference Include="..\AI.Foundry.Local.RAG.Shared\AI.Foundry.Local.RAG.Shared.csproj" IsAspireProjectResource="false" />
   </ItemGroup>
